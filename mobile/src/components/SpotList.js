@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'
-import api from '../services/api'
+import { withNavigation } from 'react-navigation';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 
-export default function SpotList({ tech }){
+import api from '../services/api';
+
+function SpotList({ tech, navigation }){
 
     const [spots, setSpots] = useState([])
 
     useEffect(()=>{
         async function loadSpots()
     {
-
         const response = await api.get('/spots', {
             params: { tech }
         })
@@ -19,6 +20,11 @@ export default function SpotList({ tech }){
         loadSpots();
 
     }, [])
+
+    function handleNavigate(id){
+        navigation.navigate('Books', { id });
+
+    }
 
     return (
         <View style={styles.container}>
@@ -34,7 +40,7 @@ export default function SpotList({ tech }){
                 <Image style={styles.thumbnail} source={{ uri: item.thumbnail_url }}/>
                 <Text style={styles.company} >{item.company}</Text>
                 <Text style={styles.price}>{item.price ? `R$${item.price}/dia` : 'GRATUITO'}</Text>
-                <TouchableOpacity onPress={()=>{}} style={styles.button}>
+                <TouchableOpacity onPress={()=>{handleNavigate(item._id)}} style={styles.button}>
                     <Text style={styles.buttonText}>Solicitar reserva</Text>
                 </TouchableOpacity>
             </View>
@@ -46,7 +52,8 @@ export default function SpotList({ tech }){
 
 const styles = StyleSheet.create({
     container:{
-        marginTop: 30
+        marginTop: 10,
+        marginBottom: 15
     },
     title:{
         fontSize: 20,
@@ -81,9 +88,19 @@ const styles = StyleSheet.create({
         color: '#999',
         marginTop: 5
     },
-    button: {
+    button:{
+        height: 32,
+        backgroundColor: '#f05a5b',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 2,
+        marginTop: 15
+    },
+    buttonText: {
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 15
     }
 })
+
+export default withNavigation(SpotList);
