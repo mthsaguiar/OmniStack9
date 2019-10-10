@@ -62,7 +62,7 @@ export default function New({history}){
             />
             <label htmlFor="company">VALOR DA DIÁRIA * <span>(em branco para gratuíto)</span> </label>
             <input type="text"
-            placeholder="Quais tecnologias usam?"
+            placeholder="Qual valor da diária?"
             id="price"
             value={price}
             onChange={e=>setPrice(e.target.value)}
